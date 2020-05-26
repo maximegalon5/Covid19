@@ -1,16 +1,18 @@
 #Covid Stress Test Article
 # Setup Work Space
 
-library(tidyverse); library(lubridate); library(RColorBrewer); library(ggrepel)
+library(tidyverse); library(lubridate); library(RColorBrewer); library(ggrepel); library(plotly)
 
 # World Covid Data from JHU
 
-url <- "https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv"
+#url <- "https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv"
 
-world_covid_data <- read.csv(url, header = TRUE)
+#world_covid_data <- read.csv(url, header = TRUE)
 
-world_covid_data <- world_covid_data %>% mutate(Date = ymd(date))
 
+#world_covid_data <- world_covid_data %>% mutate(Date = ymd(date))
+#saveRDS(world_covid_data, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/world_covid_data_5_25_2020")
+world_covid_data <- readRDS(file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/world_covid_data_5_25_2020")
 #Summary Deaths
 total_deaths <- world_covid_data %>% 
   filter(type == "death") %>%
@@ -50,17 +52,27 @@ population_data$`Country Name`[92] <- "Iran"
 # sequential inner_joins to create the appropriate data set for plotting
 # Total Deaths and Density of Popultion
 
-df <- inner_join(total_deaths, X2018_density_pop, by =c("country" = "Country Name")) %>% mutate(pop_density = as.numeric(`2018 [YR2018]`)) %>%
+df <- inner_join(total_deaths, X2018_density_pop, by =c("country" = "Country Name")) %>% 
+  mutate(pop_density = round(as.numeric(`2018 [YR2018]`), 0)) %>%
   select(-`2018 [YR2018]`)
 
 
 # df with Population Data  
-df <- inner_join(df, population_data, by =c("country" = "Country Name")) %>% mutate(population = as.numeric(`2018 [YR2018]`)) %>% 
-  mutate(total_deaths_m = total_deaths / population * 1000000) %>% select(-`2018 [YR2018]`)
+df <- inner_join(df, population_data, by =c("country" = "Country Name")) %>% 
+  mutate(population = round(as.numeric(`2018 [YR2018]`),0)) %>% 
+  mutate(total_deaths_m = round(total_deaths / population * 1000000), 2) %>% select(-`2018 [YR2018]`)
 
 # join obesity data
 
 df <- inner_join(df, Obesity_Data, by = "country") %>% select(-`Obesity Percent`)
+
+# format obesity_precent_group
+
+df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, "]", "")
+df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, "\\(", "")
+df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, ",", "-")
+
+#saveRDS(df, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/article_data_5_25_2020")
 
 # plot data for countries having more that 400 deaths
 
