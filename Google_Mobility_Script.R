@@ -66,14 +66,17 @@ CA_NY_Plot <- US_Mobility_Data_long %>%
   geom_boxplot() +
   theme_bw() +
   facet_grid(state ~ Time_Line, scales = "free") +
-  labs(title = "State of California Google Mobility Data",
+  labs(title = "State of California Compared with NY",
        y = "Percentage Change in Mobility over Jan-Feb Base",
        x = "Time Line",
        caption = "Google LLC: Google COVID-19 Community Mobility Reports 
        https://www.google.com/covid19/mobility
        Accessed: 27th May 2020",
        color = "Mobility Category") +
-   scale_color_discrete(labels = c("Grocery and Pharmacy", "Parks", "Residential", "Retail and Recreation", "Transit Stations", "Workplace"))
+   scale_color_discrete(labels = c("Grocery and Pharmacy", "Parks", "Residential", 
+                                   "Retail and Recreation", "Transit Stations", "Workplace")) +
+  theme(legend.position = "bottom",
+        strip.text = element_text(size = rel(.8)))
 
 
 
