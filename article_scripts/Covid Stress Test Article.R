@@ -3,16 +3,16 @@
 
 library(tidyverse); library(lubridate); library(RColorBrewer); library(ggrepel); library(plotly)
 
-# World Covid Data from JHU
+# Load JHU World Covid Data from local source after downloading it from JHU
 
-#url <- "https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv"
+source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/download_JHU_data.R')
 
-#world_covid_data <- read.csv(url, header = TRUE)
+#load_name <- paste0("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_", Sys.Date(), sep = "")
 
+#world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_2020-05-30")
 
-#world_covid_data <- world_covid_data %>% mutate(Date = ymd(date))
-#saveRDS(world_covid_data, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/world_covid_data_5_25_2020")
-world_covid_data <- readRDS(file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/world_covid_data_5_25_2020")
+world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_5_25_2020")
+
 #Summary Deaths
 total_deaths <- world_covid_data %>% 
   filter(type == "death") %>%
