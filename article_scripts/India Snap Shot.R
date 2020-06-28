@@ -20,14 +20,14 @@ India_cum_data <- df %>% filter(country == "India") %>%
 
 rm(df)
 
-India_cum_data %>% tail()
+India_cum_data %>% tail(10)
 
 # make long
 
 India_cum_data_long <- India_cum_data %>% pivot_longer(-Date, names_to = "HStatistic",
                                         values_to = "value")
 
-rm(India_cum_data)
+#rm(India_cum_data)
 
 plot_object <- India_cum_data_long %>% filter(HStatistic %in% c("cum_confirmed", "cum_dead", "cum_recovered")) %>%
   ggplot(aes(x = Date, y = value, color = HStatistic)) +

@@ -5,20 +5,21 @@ library(tidyverse); library(lubridate); library(RColorBrewer); library(ggrepel);
 
 # Load JHU World Covid Data from local source after downloading it from JHU
 
-source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/download_JHU_data.R')
+#source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/download_JHU_data.R')
 
 #load_name <- paste0("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_", Sys.Date(), sep = "")
 
-#world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_2020-05-30")
+#world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_5_25_2020")
 
-world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/world_covid_data_5_25_2020")
+world_covid_data <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/backup/world_covid_data_2020-05-31")
 
 #Summary Deaths
+
 total_deaths <- world_covid_data %>% 
-  filter(type == "death") %>%
-  group_by(country) %>%
-  summarise(total_deaths = sum(cases)) %>%
-  arrange(-total_deaths)
+ filter(type == "death") %>%
+ group_by(country) %>%
+summarise(total_deaths = sum(cases)) %>%
+ arrange(-total_deaths)
 
 total_deaths$country[1] <- "United States"
 
@@ -39,6 +40,7 @@ X2018_density_pop <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/
                                                `Series Code` = col_skip(), `Series Name` = col_skip()))
 
 X2018_density_pop$`Country Name`[92] <- "Iran"
+X2018_density_pop$`Country Name`[162] <- "Russia"
 
 
 #Import Population Data (from the world bank - https://data.worldbank.org/indicator/EN.POP.DNST)
@@ -48,6 +50,7 @@ population_data <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/da
                                              `Series Code` = col_skip(), `Series Name` = col_skip()))
 
 population_data$`Country Name`[92] <- "Iran"
+population_data$`Country Name`[162] <- "Russia"
 
 # sequential inner_joins to create the appropriate data set for plotting
 # Total Deaths and Density of Popultion
@@ -72,7 +75,7 @@ df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, "]", "")
 df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, "\\(", "")
 df$Obesity_Percent_Group <- str_replace(df$Obesity_Percent_Group, ",", "-")
 
-#saveRDS(df, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/article_data_5_25_2020")
+#saveRDS(df, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/pop_density_covid_31_5_2020")
 
 # plot data for countries having more that 400 deaths
 

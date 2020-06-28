@@ -1,12 +1,11 @@
 # India Baseline Article Plot
 
-# RBI Density of Population Data
 
-library(rvest); library(tidyverse); library(ggrepel); library(plotly)
+library(tidyverse); library(ggrepel); library(plotly)
 
 #load data from india_base_line.R
 
-#source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/India_baseline_data.R')
+#source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/article_scripts/India_baseline_data.R')
 
 ind_df <- readRDS(ind_df, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/india_baseline_data")
 
