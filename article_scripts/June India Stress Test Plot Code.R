@@ -23,10 +23,13 @@ test <- test %>%
             Workplace = round(mean(workplaces_percent_change_from_baseline, na.rm = TRUE),0),
             Residential = round(mean(residential_percent_change_from_baseline, na.rm = TRUE),0))
 
+test$Residential <- -test$Residential
+  
 test <- transform(test, Average_Mobility = round(rowMeans(test[,-1], na.rm = TRUE),0))
 
 test <- test %>% arrange(Average_Mobility)
 
+test$Residential <- -test$Residential
 # Make Long
 
 test_long <- test %>% 
