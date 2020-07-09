@@ -50,7 +50,7 @@ p <- dygraph(plot_data, main = "California Movement Restrictions vs New Cases") 
   dyEvent("2020-5-25", "Memorial Day", labelLoc = "bottom") %>%
   dyEvent("2020-6-14", "LA Protests", labelLoc = "bottom") %>%
   dySeries("New Cases", axis = "y2") %>%
-  dyAxis("y2", label = "Daily Covid19 Positive Cases", valueRange = c(-10000, 10000)) %>%
+  dyAxis("y2", label = "Daily Covid19 Positive Cases", valueRange = c(-15000, 15000)) %>%
   dyShading(from = "2020-5-26", to = "2020-6-4", color = "#e6ffff") %>%
   dyShading(from = "2020-6-4", to = "2020-6-9", color = "#e6fff3") %>%
   dyShading(from = "2020-6-14", to = "2020-6-24", color = "#e6ffff") %>%
