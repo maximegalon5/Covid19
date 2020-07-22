@@ -4,7 +4,9 @@ library(tidyverse); library(dygraphs); library(xts); library(lubridate)
 library(RColorBrewer); library(formattable)
 
 #Load Mobility Data
-source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/Read_Google_Mobility_Data.R')
+Mobility_Report <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/google_mobility/Global_Mobility_Report.csv", 
+                                   col_types = cols(X1 = col_skip(), date = col_datetime(format = "%Y-%m-%d"), 
+                                                          sub_region_1 = col_character(), sub_region_2 = col_character()))
 
 #Rename cols
 colnames(Mobility_Report) <- c("Country", "State", "Sub-Region", "Date", "Retail-Recreation",
@@ -19,6 +21,8 @@ CA_Mobility <- Mobility_Report %>% filter(State == "California") %>%
 
 CA_dat <- CA_Mobility %>% filter(`Sub-Region` == "State") %>% 
   select(-c(Country, State, `Sub-Region`))
+
+CA_dat$Date <- as.Date(CA_dat$Date)
 
 #CHHS Data from Download CHHS Data.R Changes made to csv by CHHS on June 25th
 Covid_Data_Ca <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/CA_Covid_State_Data.Rds")

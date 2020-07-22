@@ -1,6 +1,6 @@
 #Download ICMR Data from the web Note this is all in wide format
 
-library(tidyverse); library(rvest); library(lubridate);library(gsubfn); #library(rebus);
+library(tidyverse); library(rvest); library(lubridate);library(gsubfn); library(parsedate) #library(rebus);
 
 #Load saved df for India Testing Numbers
 India_testing_numbers_old <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/India_testing_numbers.csv", 
@@ -17,8 +17,8 @@ total_tests <- icmr %>% html_nodes("h2") %>% magrittr::extract2(2) %>%
 
 # extract Date of latest numbers
 
-as_of <- icmr %>% html_nodes("h2") %>% magrittr::extract2(1) %>%
-  html_text() %>% strapplyc("\\d+/\\d+/\\d+", simplify = TRUE) %>% dmy()
+as_of <- icmr %>% html_nodes("p") %>% magrittr::extract2(1) %>%
+  html_text() %>% parsedate::parse_date()
 
 # extract testing capacity
 

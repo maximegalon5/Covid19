@@ -91,10 +91,81 @@ plot1 <- df %>% filter(total_deaths >= 400) %>%
   scale_y_log10() + 
   scale_x_log10() +
   theme_minimal() +
-  scale_colour_discrete(name  ="Percentage of Obesity",
-                        labels=c("Under 5", "5 - 10", "10 - 15", "15 - 20", "20 - 25", "25 - 30", "30 - 35", "35 - 40")) +
+  scale_colour_discrete(name  ="Percentage of Obesity") +
   theme(legend.position = "bottom", title = element_text(size = rel(.9)),
         panel.border = element_rect(linetype = "solid", fill = NA,
                                     color = "grey80"))
 
+# July Update
+
+world_covid_data2 <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/backup/world_covid_data_2020-07-15")
+
+#Summary Deaths
+
+total_deaths2 <- world_covid_data2 %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_deaths = sum(cases)) %>%
+  arrange(-total_deaths)
+
+total_deaths2$country[1] <- "United States"
+
+df2 <- inner_join(total_deaths2, X2018_density_pop, by =c("country" = "Country Name")) %>% 
+  mutate(pop_density = round(as.numeric(`2018 [YR2018]`), 0)) %>%
+  select(-`2018 [YR2018]`)
+
+
+# df with Population Data  
+df2 <- inner_join(df2, population_data, by =c("country" = "Country Name")) %>% 
+  mutate(population = round(as.numeric(`2018 [YR2018]`),0)) %>% 
+  mutate(total_deaths_m = round(total_deaths / population * 1000000), 2) %>% select(-`2018 [YR2018]`)
+
+# join obesity data
+
+df2 <- inner_join(df2, Obesity_Data, by = "country") %>% select(-`Obesity Percent`)
+
+# format obesity_precent_group
+
+df2$Obesity_Percent_Group <- str_replace(df2$Obesity_Percent_Group, "]", "")
+df2$Obesity_Percent_Group <- str_replace(df2$Obesity_Percent_Group, "\\(", "")
+df2$Obesity_Percent_Group <- str_replace(df2$Obesity_Percent_Group, ",", "-")
+
+df2 <- df2 %>% arrange(Obesity_Percent_Group)
+
+# Add Mobility Data
+
+library(readr)
+
+Mobility_Report <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/google_mobility/Global_Mobility_Report_2020_7_13.csv", 
+                            col_types = cols(census_fips_code = col_skip(), 
+                                             country_region_code = col_skip(), 
+                                             date = col_date(format = "%Y-%m-%d"), 
+                                             iso_3166_2_code = col_skip(), sub_region_1 = col_character(), 
+                                             sub_region_2 = col_character()))
+
+Select_Mobility_Data <- Mobility_Report %>% dplyr::filter(is.na(sub_region_1)) %>% select(-sub_region_1, -sub_region_2) %>%
+  select(country = country_region, date, stayed_home = residential_percent_change_from_baseline) %>% group_by(country) %>% 
+  summarise(Ave_home_stay = round(mean(stayed_home),2))
+
+df2 <- inner_join(df2, Select_Mobility_Data, by = "country")
+
+# plot data for countries having more that 15 deaths per M - July
+
+plot2 <- df2 %>% filter(total_deaths_m >= 150) %>% 
+  ggplot(aes(y = pop_density, x = total_deaths_m, color = Obesity_Percent_Group)) + 
+  geom_text_repel(aes(label = country), size = rel(3), 
+                  nudge_y = -15, show.legend = FALSE)  +
+  geom_text_repel(aes(label = Ave_home_stay), size = rel(3), 
+                  nudge_y = 15, show.legend = FALSE) +
+  geom_point() +
+  ylim(-100,600) +
+  labs(y = " Density of Population / sq.km", x = "Total Number of Deaths Per M Population", 
+       title = "Deaths Due to Covid Per Million vs Density of Population - July 15th", 
+       subtitle = "Countries > 150 Deaths Per M Population + Average increase in Residential Mobility Category", 
+       caption = "Similarly colored countries have the same national obesity averages | Pneumonia kills ~ 150 / M Population") +
+  theme_minimal() +
+  scale_colour_discrete(name  ="Percentage of Obesity") +
+  theme(legend.position = "bottom", title = element_text(size = rel(.9)),
+        panel.border = element_rect(linetype = "solid", fill = NA,
+                                    color = "grey80"))
 

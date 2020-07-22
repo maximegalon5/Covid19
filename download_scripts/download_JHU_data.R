@@ -3,7 +3,7 @@
 url <- "https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv"
 
 world_covid_data <- read.csv(url, header = TRUE)
-library(lubridate); library(magrittr)
+library(lubridate); library(magrittr); library(tidyverse)
 
 world_covid_data <- world_covid_data %>% mutate(Date = ymd(date))
 
