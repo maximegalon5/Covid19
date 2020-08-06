@@ -5,8 +5,8 @@
 library(tidyverse); library(plotly); #library(epitools)
 
 # Load data
-
-Global_Mobility_Report <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/google_mobility/Global_Mobility_Report_accessed_5_27_2020.csv", 
+setwd("~/GitHub")
+Global_Mobility_Report <- read_csv("~/GitHub/Covid19/data/google_mobility/Global_Mobility_Report_accessed_5_27_2020.csv", 
                                    col_types = cols(date = col_date(format = "%m/%d/%Y"), 
                                                     sub_region_1 = col_character(), 
                                                     sub_region_2 = col_character()))

@@ -61,8 +61,10 @@ California_Covid_County_Data <- right_join(California_Covid_County_Data, CA_Case
 
 California_Covid_State_Data <- California_Covid_County_Data %>% group_by(Date) %>% summarise_if(is.numeric, sum, na.rm = TRUE)
 
-saveRDS(California_Covid_County_Data, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/CA_Covid_County_Data.Rds")
+setwd("~/GitHub")
 
-saveRDS(California_Covid_State_Data, file = "C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/CA_Covid_State_Data.Rds")
+saveRDS(California_Covid_County_Data, file = "~/GitHub/Covid19/data/CA_Covid_County_Data.Rds")
+
+saveRDS(California_Covid_State_Data, file = "~/GitHub/Covid19/data/CA_Covid_State_Data.Rds")
 
 #rm(list = ls())

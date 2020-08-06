@@ -4,7 +4,8 @@ library(tidyverse); library(dygraphs); library(xts); library(lubridate)
 library(RColorBrewer); library(formattable)
 
 #Load Mobility Data
-Mobility_Report <- read_csv("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/google_mobility/Global_Mobility_Report.csv", 
+setwd("~/GitHub")
+Mobility_Report <- read_csv("~/GitHub/Covid19/data/google_mobility/Global_Mobility_Report.csv", 
                                    col_types = cols(X1 = col_skip(), date = col_datetime(format = "%Y-%m-%d"), 
                                                           sub_region_1 = col_character(), sub_region_2 = col_character()))
 
@@ -25,7 +26,7 @@ CA_dat <- CA_Mobility %>% filter(`Sub-Region` == "State") %>%
 CA_dat$Date <- as.Date(CA_dat$Date)
 
 #CHHS Data from Download CHHS Data.R Changes made to csv by CHHS on June 25th
-Covid_Data_Ca <- readRDS("C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/data/CA_Covid_State_Data.Rds")
+Covid_Data_Ca <- readRDS("~/GitHub/Covid19/data/CA_Covid_State_Data.Rds")
 
 table_data <- Covid_Data_Ca %>% select(Date, `Total Confirmed`, `New Cases`, `Total Hosp` = Hospitalized, ICU, ICU_Available) %>%
   mutate(`% ICU` = percent(ICU/ICU_Available), `New ICU` = ICU-lag(ICU)) %>% select(-ICU_Available)
@@ -33,7 +34,7 @@ table_data <- Covid_Data_Ca %>% select(Date, `Total Confirmed`, `New Cases`, `To
 plot_data_temp <- Covid_Data_Ca %>%
   select(Date, "New Cases")
 
-plot_data <- full_join(CA_dat, plot_data_temp, by = c("Date","Date"))
+plot_data <- full_join(CA_dat, plot_data_temp, by = c("Date" = "Date"))
 
 plot_data <- xts(plot_data, order.by = plot_data$Date)
 

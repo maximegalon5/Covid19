@@ -4,8 +4,8 @@
 
 library(tidyverse)
 library(viridis)
-
-source('C:/Users/Vivek/SkyDrive/Documents/GitHub/Covid19/download_scripts/Read_Google_Mobility_Data.R')
+setwd("~/GitHub")
+source('~/GitHub/Covid19/download_scripts/Read_Google_Mobility_Data.R')
 
 test <- Mobility_Report %>% 
   dplyr::filter(date > "2020-06-01") %>%
